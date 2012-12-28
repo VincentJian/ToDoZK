@@ -3,7 +3,7 @@
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	id="WebApp_ID" version="3.0">
-	<display-name>ZK PushState Example</display-name>
+	<display-name>ToDoZK</display-name>
 	<listener>
 		<description>Used to cleanup when a session is destroyed</description>
 		<display-name>ZK Session cleaner</display-name>
@@ -23,6 +23,15 @@
 		<description>The asynchronous update engine for ZK</description>
 		<servlet-name>auEngine</servlet-name>
 		<servlet-class>org.zkoss.zk.au.http.DHtmlUpdateServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>InitServer</servlet-name>	
+		<servlet-class>org.zkoss.todoZK.InitServer</servlet-class>
+		<load-on-startup>2</load-on-startup>
+		<init-param>
+			<param-name>type</param-name>
+			<param-value>mock</param-value>
+		</init-param>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>zkLoader</servlet-name>
