@@ -1,0 +1,85 @@
+body {
+	font-family: "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	padding: 0;
+	margin: 0;
+}
+
+#header {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 100%;
+	height: 60px;
+	background: #000000;
+	z-index: 9999;
+}
+	.navbar {
+		clear: both;
+		padding: 0 20px;
+		position: relative;
+	}
+	.navbar a {
+		color: #999999;
+		text-decoration: none;
+		text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	}
+		.navbar .brand {
+			float: left;
+			display: block;
+			padding: 12px 0 10px;
+			font-family: "Metal Mania", "Droid Serif", "Helvetica Neue", Helvetica, Arial, sans-serif;
+			font-size: 32px;
+			font-weight: 200;
+		}
+		.navbar .nav {
+			float: left;
+			list-style: none;
+			display: block;
+		}
+		.navbar .nav li {
+			float: left;
+			line-height: 30px;
+			margin: 0 10px 0 0;
+		}
+		.navbar .login {
+			float: right;
+			color: #999999;
+			line-height: 60px;
+		}
+
+#container {
+	display: inline-block;
+	clear: both;
+	position: relative;
+	margin-top: 75px;
+	width: 100%;
+}
+	.sidebar {
+		position: fixed;
+		float: left;
+		width: 250px;
+		margin-left: 15px;
+	}
+		.sidebar .menu {
+			width: 250px;
+			height: 300px;
+			background: whiteSmoke;
+		}
+		.sidebar .user_status {
+			width: 250px;
+			height: 200px;
+			background: whiteSmoke;
+			margin-top: 15px;
+		}
+	.content {
+		background: whiteSmoke;
+		margin: 0 15px 0 280px;
+	}
+
+#footer {
+	width: 100%;
+	height: 50px;
+	background: whiteSmoke;
+	margin-top: 15px;
+}
