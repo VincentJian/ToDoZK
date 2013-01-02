@@ -1,9 +1,29 @@
 package org.zkoss.todoZK.vo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Milestone {
 	private Long id;
 	private Long workspaceId;
 	private String title;
+	private List<Task> tasks;
+	
+	public Milestone() {
+		tasks = new ArrayList<Task>();
+	}
+	
+	public List<Task> getTasks() {
+		return tasks;
+	}
+	
+	public void addTask(Task task) {
+		tasks.add(task);
+	}
+	
+	public void removeTask(Task task) {
+		tasks.remove(task);
+	}
 
 	public Long getId() {
 		return id;

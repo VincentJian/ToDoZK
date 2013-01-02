@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import org.zkoss.todoZK.exception.MilestoneNotExist;
+import org.zkoss.todoZK.exception.WorkspaceNotExist;
 import org.zkoss.todoZK.vo.Milestone;
 import org.zkoss.todoZK.vo.Task;
 import org.zkoss.todoZK.vo.Workspace;
@@ -30,37 +32,33 @@ class MockDB extends AbstractDB {
 	}
 		
 	@Override
-	public Workspace getWorkspaceById(Long id) {
+	public Workspace getWorkspaceById(Long id) throws WorkspaceNotExist {
 		for (Workspace ws : workspaces) {
-			if (ws.getClass().equals(id)) {
+			if (ws.getId().equals(id)) {
 				return ws;
 			}
 		}
-		return null;
+		throw new WorkspaceNotExist();
 	}
 	
 	@Override
-	public List<Milestone> getMilestonesByWorkspace(Long workspaceId) {
-		ArrayList<Milestone> result = new ArrayList<Milestone>();
+	public Milestone getMilestoneById(Long id) throws MilestoneNotExist {
 		for (Milestone ms : milestones) {
-			if (ms.getWorkspaceId().equals(workspaceId)) {
-				result.add(ms);
+			if (ms.getId().equals(id)) {
+				return ms;
 			}
 		}
-		//TODO sort result
-		return result;
+		throw new MilestoneNotExist();
+	}
+	
+	@Override
+	public List<Milestone> getMilestonesByWorkspace(Long workspaceId) throws WorkspaceNotExist {
+		return getWorkspaceById(workspaceId).getMilestones();
 	}
 
 	@Override
-	public List<Task> getTasksByMilestone(Long milestoneId) {
-		ArrayList<Task> result = new ArrayList<Task>();
-		for (Task task : tasks) {
-			if (task.getMilestoneId().equals(milestoneId)) {
-				result.add(task);
-			}
-		}
-		//TODO sort result
-		return null;
+	public List<Task> getTasksByMilestone(Long milestoneId) throws MilestoneNotExist {
+		return getMilestoneById(milestoneId).getTasks();
 	}
 	
 	@Override
@@ -69,14 +67,16 @@ class MockDB extends AbstractDB {
 	}
 
 	@Override
-	public void addMilestone(Milestone ms) {
-		//XXX check workspace exist
+	public void addMilestone(Milestone ms) throws WorkspaceNotExist {
+		Workspace ws = getWorkspaceById(ms.getWorkspaceId());
+		ws.addMilestone(ms);
 		milestones.add(ms);
 	}
 
 	@Override
-	public void addTask(Task task) {
-		//XXX check milestone exist
+	public void addTask(Task task) throws MilestoneNotExist {
+		Milestone ms = getMilestoneById(task.getMilestoneId());
+		ms.addTask(task);
 		tasks.add(task);
 	}
 
@@ -101,7 +101,11 @@ class MockDB extends AbstractDB {
 			ms.setId(genNextLong());
 			ms.setTitle("Milestone "+ms.getId());
 			ms.setWorkspaceId(ws.getId());
-			addMilestone(ms);
+			try {
+				addMilestone(ms);
+			} catch (WorkspaceNotExist e) {
+				//never happen
+			}
 			genTask(ms, random.nextInt(8)+1);
 		}
 	}
@@ -115,7 +119,11 @@ class MockDB extends AbstractDB {
 			task.setCreateDate(genDate(true));
 			task.setDueDate(genDate(false));
 			task.setMilestoneId(ms.getId());
-			addTask(task);
+			try {
+				addTask(task);
+			} catch (MilestoneNotExist e) {
+				//never happen
+			}
 		}
 	}
 
