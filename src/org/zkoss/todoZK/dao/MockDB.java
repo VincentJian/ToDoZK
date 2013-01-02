@@ -28,7 +28,7 @@ class MockDB extends AbstractDB {
 	public List<Workspace> getWorkspaces() {
 		return workspaces;
 	}
-	
+		
 	@Override
 	public Workspace getWorkspaceById(Long id) {
 		for (Workspace ws : workspaces) {
@@ -38,7 +38,31 @@ class MockDB extends AbstractDB {
 		}
 		return null;
 	}
+	
+	@Override
+	public List<Milestone> getMilestonesByWorkspace(Long workspaceId) {
+		ArrayList<Milestone> result = new ArrayList<Milestone>();
+		for (Milestone ms : milestones) {
+			if (ms.getId().equals(workspaceId)) {
+				result.add(ms);
+			}
+		}
+		//TODO sort result
+		return result;
+	}
 
+	@Override
+	public List<Task> getTasksByMilestone(Long milestoneId) {
+		ArrayList<Task> result = new ArrayList<Task>();
+		for (Task task : tasks) {
+			if (task.getId().equals(milestoneId)) {
+				result.add(task);
+			}
+		}
+		//TODO sort result
+		return null;
+	}
+	
 	@Override
 	public void addWorkspace(Workspace ws) {
 		workspaces.add(ws);
