@@ -43,7 +43,7 @@ class MockDB extends AbstractDB {
 	public List<Milestone> getMilestonesByWorkspace(Long workspaceId) {
 		ArrayList<Milestone> result = new ArrayList<Milestone>();
 		for (Milestone ms : milestones) {
-			if (ms.getId().equals(workspaceId)) {
+			if (ms.getWorkspaceId().equals(workspaceId)) {
 				result.add(ms);
 			}
 		}
@@ -55,7 +55,7 @@ class MockDB extends AbstractDB {
 	public List<Task> getTasksByMilestone(Long milestoneId) {
 		ArrayList<Task> result = new ArrayList<Task>();
 		for (Task task : tasks) {
-			if (task.getId().equals(milestoneId)) {
+			if (task.getMilestoneId().equals(milestoneId)) {
 				result.add(task);
 			}
 		}
