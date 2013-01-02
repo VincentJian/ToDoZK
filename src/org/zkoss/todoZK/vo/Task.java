@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Task {
 	private Long id;
+	private Long milestoneId;
 	private String title;
 	private String description;
 	private Date createDate;
@@ -53,24 +54,10 @@ public class Task {
 	public void setFinish(boolean finish) {
 		this.finish = finish;
 	}
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Task [id=");
-		builder.append(id);
-		builder.append(", title=");
-		builder.append(title);
-		builder.append(", description=");
-		builder.append(description);
-		builder.append(", createDate=");
-		builder.append(createDate);
-		builder.append(", dueDate=");
-		builder.append(dueDate);
-		builder.append(", priority=");
-		builder.append(priority);
-		builder.append(", finish=");
-		builder.append(finish);
-		builder.append("]");
-		return builder.toString();
+	public Long getMilestoneId() {
+		return milestoneId;
+	}
+	public void setMilestoneId(Long milestoneId) {
+		this.milestoneId = milestoneId;
 	}
 }

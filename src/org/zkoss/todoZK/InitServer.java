@@ -4,7 +4,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
-import org.zkoss.todoZK.dao.AbstractDB;
+import org.zkoss.todoZK.dao.DBProvider;
 
 public class InitServer extends HttpServlet{
 	private static final long serialVersionUID = 1L;
@@ -12,6 +12,6 @@ public class InitServer extends HttpServlet{
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 		String type = config.getInitParameter("type");
-		AbstractDB.getInstance(type);
+		DBProvider.getInstance(type);
 	}
 }

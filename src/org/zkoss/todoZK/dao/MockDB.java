@@ -10,30 +10,18 @@ import org.zkoss.todoZK.vo.Task;
 import org.zkoss.todoZK.vo.Workspace;
 
 class MockDB extends AbstractDB {
-	private static List<Workspace> workspaces;
+	//simulate table in Database
+	private static List<Workspace> workspaces = new ArrayList<Workspace>();
+	private static List<Milestone> milestones = new ArrayList<Milestone>();
+	private static List<Task> tasks = new ArrayList<Task>();
+	//
+	
 	private static Long longId = 0L;
 	private static final Random random = new Random();
 	private static final Date standardDate = new Date();
 
 	public MockDB() {
-		if (workspaces != null) {
-			return;
-		}
-
-		workspaces = new ArrayList<Workspace>();
-		Workspace ws1 = new Workspace();
-		ws1.setId(genNextLong());
-		ws1.setTitle("ZK Workspace");
-
-		Workspace ws2 = new Workspace();
-		ws2.setId(genNextLong());
-		ws2.setTitle("Personal");
-		
-		genMilestone(ws1, random.nextInt(3)+2);
-		genMilestone(ws2, random.nextInt(3)+2);
-		
-		workspaces.add(ws1);
-		workspaces.add(ws2);
+		genMockData();
 	}
 
 	@Override
@@ -50,14 +38,47 @@ class MockDB extends AbstractDB {
 		}
 		return null;
 	}
-	
+
+	@Override
+	public void addWorkspace(Workspace ws) {
+		workspaces.add(ws);
+	}
+
+	@Override
+	public void addMilestone(Milestone ms) {
+		//XXX check workspace exist
+		milestones.add(ms);
+	}
+
+	@Override
+	public void addTask(Task task) {
+		//XXX check milestone exist
+		tasks.add(task);
+	}
+
+	////////////////////////////////////////////////////////////////////
+	private void genMockData() {
+		Workspace ws1 = new Workspace();
+		ws1.setId(genNextLong());
+		ws1.setTitle("ZK Workspace");
+		addWorkspace(ws1);
+		genMilestone(ws1, random.nextInt(3)+2);
+
+		Workspace ws2 = new Workspace();
+		ws2.setId(genNextLong());
+		ws2.setTitle("Personal");
+		addWorkspace(ws2);
+		genMilestone(ws2, random.nextInt(3)+2);
+	}
+
 	private void genMilestone(Workspace ws, int number) {
 		for (int i=0; i<number; i++) {
 			Milestone ms = new Milestone();
 			ms.setId(genNextLong());
 			ms.setTitle("Milestone "+ms.getId());
+			ms.setWorkspaceId(ws.getId());
+			addMilestone(ms);
 			genTask(ms, random.nextInt(8)+1);
-			ws.addMilestone(ms);
 		}
 	}
 	
@@ -69,7 +90,8 @@ class MockDB extends AbstractDB {
 			task.setPriority(random.nextInt(5));
 			task.setCreateDate(genDate(true));
 			task.setDueDate(genDate(false));
-			ms.addTask(task);
+			task.setMilestoneId(ms.getId());
+			addTask(task);
 		}
 	}
 
