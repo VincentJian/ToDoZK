@@ -1,0 +1,26 @@
+<zk>
+	<hlayout hflex="min" apply="org.zkoss.bind.BindComposer"
+		viewModel="@id('vm') @init('org.zkoss.todoZK.viewmodel.CardViewVM')" 
+		children="@load(vm.milestones)" spacing="8px" style="padding-right: 10px;">
+		<template name="children" var="milestone">
+			<window title="@load(milestone.title)" width="250px" border="normal">
+				<vlayout vflex="min" children="@load(milestone.tasks)">
+					<template name="children" var="task">
+						<groupbox title="@load(task.title)" vflex="min" mold="3d" closable="false">
+							<vlayout>
+								<label value="@load(task.description)" />
+								<hlayout>
+									<div sclass="duedate" tooltiptext="due date">
+										<label value="@load(task.dueDate) @converter('formattedDate', format='yyyy/MM/dd')" />
+									</div>
+									<div sclass="@load(task.priority) @converter(vm.priorityConverter)" />
+								</hlayout>
+								<label value='@load(task.finish ? "Done" : "Working......")' />
+							</vlayout>
+						</groupbox>
+					</template>
+				</vlayout>
+			</window>
+		</template>
+	</hlayout>
+</zk>

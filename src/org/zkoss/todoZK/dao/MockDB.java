@@ -131,6 +131,7 @@ class MockDB extends AbstractDB {
 			task.setCreateDate(genDate(true));
 			task.setDueDate(genDate(false));
 			task.setMilestoneId(ms.getId());
+			task.setFinish(random.nextBoolean());
 			try {
 				addTask(task);
 			} catch (MilestoneNotExist e) {
