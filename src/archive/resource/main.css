@@ -59,21 +59,31 @@ body {
 		position: fixed;
 		float: left;
 		width: 250px;
-		margin-left: 15px;
+		margin-left: 5px;
 	}
 		.sidebar .menu {
 			width: 250px;
 			height: 300px;
-			background: whiteSmoke;
+			border: none;
+			padding: 10px 0 0 1px;
+			background: #00a3a7;
 		}
 		.sidebar .user_status {
 			width: 250px;
 			height: 200px;
-			background: whiteSmoke;
 			margin-top: 15px;
+			background: #00a3a7;
+			padding: 10px 0 0 10px;
+		}
+		.user_status .path {
+			font-size: 16px !important;
+			color: #ffffff !important;
+		}
+		.user_status .statistic {
+			color: #ffffff !important;
 		}
 	.content {
-		margin-left: 280px;
+		margin-left: 270px;
 		padding: 10px 10px;
 		background: #0066cc;
 		overflow: auto;
@@ -106,4 +116,20 @@ body {
 }
 .priority.urgent {
 	background: url("images/urgent.png");
+}
+
+/* Override ZK default style */
+div.z-tree {
+	background: none !important;
+	background-image: none !important;
+	border: none !important;
+}
+div.z-tree-body {
+	background: none !important;
+}
+tr.z-treerow-seld, tr.z-treerow-over {
+	background: #00533f !important;
+}
+div.z-treecell-cnt {
+	color: #FFFFFF !important;
 }

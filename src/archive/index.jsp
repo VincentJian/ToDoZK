@@ -29,7 +29,7 @@
 	</div>
 	<div id="container">
 		<div class="sidebar">
-			<jsp:include page="zul/sidebar.zul"></jsp:include>
+			<jsp:include page="zul/sidebar.zul" />
 		</div>
 		<div class="content">
 			<!-- include content.zul here -->

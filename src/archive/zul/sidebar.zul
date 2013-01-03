@@ -1,23 +1,24 @@
-<vlayout apply="org.zkoss.bind.BindComposer" viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.SidebarVM")'>
-	<!-- Board -->
-	<tree model="@load(vm.boardModel)" selectedItem="@save(vm.selectedItem)">
-		<template name="model" var="board"><treeitem>
-	 		<treerow>
-	 			<treecell label="@load(board.data.title)" />
-	 		</treerow>
-	 	</treeitem></template>
-	</tree>
-	
-	<!-- UserStatus -->
-	<vlayout>
-		<label value="@load(vm.currentPath)"></label>
-		<div>
-			<label>Finished Task:</label>
-			<label value='@load(vm.finishedAmount)' />
+<zk>
+	<vlayout apply="org.zkoss.bind.BindComposer" viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.SidebarVM")' spacing="0">
+		<!-- Board -->
+		<div sclass="menu">
+			<tree model="@load(vm.boardModel)" selectedItem="@save(vm.selectedItem)" hflex="1">
+				<template name="model" var="board"><treeitem>
+			 		<treerow>
+			 			<treecell label="@load(board.data.title)" />
+			 		</treerow>
+			 	</treeitem></template>
+			</tree>
 		</div>
-		<div>
-			<label>Unfinish Task:</label>
-			<label value="@load(vm.unfinishedAmount)" />
-		</div>
+		<!-- UserStatus -->
+		<vlayout sclass="user_status">
+			<label value="@load(vm.currentPath)" sclass="path"></label>
+			<div sclass="statistic">
+				Finished Task: <label value='@load(vm.finishedAmount)' />
+			</div>
+			<div sclass="statistic">
+				Unfinished Task: <label value="@load(vm.unfinishedAmount)" />
+			</div>
+		</vlayout>
 	</vlayout>
-</vlayout>
+</zk>
