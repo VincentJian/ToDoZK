@@ -38,7 +38,7 @@
 		</div>
 		<div class="content">
 			<!-- include content.zul here -->
-			<jsp:include page="content.zul" />
+			<jsp:include page="zul/cardview1.zul" />
 		</div>
 	</div>
 	<div id="footer">

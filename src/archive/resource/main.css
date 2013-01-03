@@ -73,8 +73,10 @@ body {
 			margin-top: 15px;
 		}
 	.content {
-		background: whiteSmoke;
-		margin: 0 15px 0 280px;
+		margin-left: 280px;
+		padding: 10px 10px;
+		background: #0066cc;
+		overflow: auto;
 	}
 
 #footer {
@@ -82,4 +84,26 @@ body {
 	height: 50px;
 	background: whiteSmoke;
 	margin-top: 15px;
+}
+
+.duedate {
+	font-weight: bold !important;
+	background: #dcdcdc;
+	cursor: default;
+}
+.priority {
+	width: 16px;
+	height: 16px;
+}
+.priority.essential {
+	background: url("images/essential.png");
+}
+.priority.vital {
+	background: url("images/vital.png");
+}
+.priority.important {
+	background: url("images/important.png");
+}
+.priority.urgent {
+	background: url("images/urgent.png");
 }
