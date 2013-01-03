@@ -16,7 +16,7 @@
 <body>
 	<div id="header">
 		<div class="navbar">
-			<a class="brand" href="#">Project name</a>
+			<a class="brand" href="#">ToDoZK</a>
 			<ul class="nav">
 				<li class="active"><a href="#">Home</a></li>
 				<li><a href="#about">About</a></li>
@@ -29,12 +29,7 @@
 	</div>
 	<div id="container">
 		<div class="sidebar">
-			<div class="menu">
-				Menu<!-- include menu.zul here -->
-			</div>
-			<div class="user_status">
-				UserStatus<!-- include userStatus.zul here -->
-			</div>
+			<jsp:include page="zul/sidebar.zul"></jsp:include>
 		</div>
 		<div class="content">
 			<!-- include content.zul here -->
