@@ -1,5 +1,5 @@
 <zk xmlns:n="native">
-	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.todoZK.viewmodel.CardViewVM')">
+	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.todoZK.viewmodel.TaskViewerVM')">
 		<n:div class="workspace">${vm.workspace.title}</n:div>
 		<hlayout hflex="min" children="@load(vm.milestones)" spacing="8px" style="padding-right: 10px;" if="${vm.milestones != null}">
 			<template name="children" var="milestone">

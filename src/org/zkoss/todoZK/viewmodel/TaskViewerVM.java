@@ -14,7 +14,7 @@ import org.zkoss.zk.ui.Execution;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Div;
 
-public class CardViewVM {
+public class TaskViewerVM {
 	
 	private AbstractDB db = DBProvider.getInstance();
 	private List<Milestone> milestones;
@@ -22,7 +22,7 @@ public class CardViewVM {
 	private Converter<String, Integer, Div> priorityConverter = new PriorityConverter();
 	private Workspace workspace;
 
-	public CardViewVM() {
+	public TaskViewerVM() {
 		Execution exec = Executions.getCurrent();
 		String ws = exec.getParameter("ws");
 		String ms = exec.getParameter("ms");
