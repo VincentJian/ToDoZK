@@ -11,14 +11,6 @@
 	<link href="resource/main.css" rel="stylesheet">
 	<link href="http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic" rel="stylesheet" type="text/css">
 	<link href="http://fonts.googleapis.com/css?family=Metal+Mania" rel="stylesheet" type="text/css">
-	
-	<!-- javascript -->
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
-	<script type="text/javascript">
-		function changeContentUrl(path) {
-			$('#content').load(path);
-		}
-	</script>
 </head>
 <body>
 	<div id="header">

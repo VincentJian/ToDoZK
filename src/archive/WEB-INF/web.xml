@@ -27,11 +27,11 @@
 	<servlet>
 		<servlet-name>InitServer</servlet-name>	
 		<servlet-class>org.zkoss.todoZK.InitServer</servlet-class>
-		<load-on-startup>2</load-on-startup>
 		<init-param>
 			<param-name>type</param-name>
 			<param-value>mock</param-value>
 		</init-param>
+		<load-on-startup>2</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>zkLoader</servlet-name>

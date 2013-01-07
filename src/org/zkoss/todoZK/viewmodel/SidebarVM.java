@@ -55,8 +55,7 @@ public class SidebarVM {
 			}
 			resetTaskStat();
 			gatherTaskStat(nowWorkspace);
-			//TODO change TaskViewer
-			Clients.evalJavaScript("changeContentUrl('innerpage/zul/cardview.zul?ws=" + ws.getId() + "')");
+			changeContent("innerpage/zul/cardview.zul?ws=" + ws.getId());
 			break;
 		case BoardItem.MILESTONE_TYPE:
 			Milestone ms;
@@ -68,24 +67,27 @@ public class SidebarVM {
 				}
 				resetTaskStat();
 				gatherTaskStat(nowWorkspace);
-				//TODO change TaskViewer
+				changeContent("innerpage/zul/cardview.zul?ms=" + ms.getId());
 			} catch (MilestoneNotExist e) {
 			}
 			break;
 		case BoardItem.ABOUT_PAGE_TYPE:
 		case BoardItem.LOG_PAGE_TYPE:
-			//TODO change content's url
 			nowWorkspace = null;
 			gatherTaskStat();
-			Clients.evalJavaScript("changeContentUrl('innerpage/jsp/" + (boardItem.isAboutPage() ? "about.jsp" : "release.jsp") + "')");
+			changeContent("innerpage/jsp/" + (boardItem.isAboutPage() ? "about.jsp" : "release.jsp"));
 			break;
 		case BoardItem.ROOT_PAGE_TYPE:
 		default:
 			nowWorkspace = null;
 			gatherTaskStat();
-			Clients.evalJavaScript("changeContentUrl('innerpage/jsp/document.jsp')");
+			changeContent("innerpage/jsp/document.jsp");
 			break;
 		}
+	}
+	
+	private void changeContent(String url) {
+		Clients.evalJavaScript("jq('#content').load('"+url+"');");
 	}
 
 	private void fetchDB() {
