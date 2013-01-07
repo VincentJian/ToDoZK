@@ -1,0 +1,24 @@
+<zk xmlns:n="native">
+	<vlayout apply="org.zkoss.bind.BindComposer" viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.SidebarVM")' spacing="0">
+		<!-- Board -->
+		<div sclass="menu">
+			<tree model="@load(vm.boardModel)" selectedItem="@save(vm.selectedItem)" hflex="1">
+				<template name="model" var="board">
+					<treeitem label="@load(board.data.title)" />
+			 	</template>
+			</tree>
+		</div>
+		<!-- UserStatus -->
+		<n:div class="user_status">
+			<n:div class="path">
+				<label value="@load(vm.currentPath)"/>
+			</n:div>
+			<n:div class="statistic">
+				Finished Task: <label value="@load(vm.finishedAmount)"/>
+			</n:div>
+			<n:div class="statistic">
+				Unfinished Task: <label value="@load(vm.unfinishedAmount)"/>
+			</n:div>
+		</n:div>
+	</vlayout>
+</zk>

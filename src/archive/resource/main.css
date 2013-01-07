@@ -73,20 +73,24 @@ body {
 			height: 200px;
 			margin-top: 15px;
 			background: #00a3a7;
-			padding: 10px 0 0 10px;
+			padding: 10px 10px;
 		}
-		.user_status .path {
+		.user_status {
+			color: #ffffff;
+		}
+		.user_status .path .z-label {
 			font-size: 16px !important;
-			color: #ffffff !important;
 		}
 		.user_status .statistic {
-			color: #ffffff !important;
+			padding-top: 10px;
+			padding-left: 10px;
 		}
 	.content {
 		margin-left: 270px;
 		padding: 10px 10px;
 		background: #0066cc;
 		overflow: auto;
+		min-height: 700px;
 	}
 
 #footer {
@@ -96,14 +100,23 @@ body {
 	margin-top: 15px;
 }
 
+.workspace {
+	font-size: 18px;
+	color: #ffffff;
+}
 .duedate {
 	font-weight: bold !important;
-	background: #dcdcdc;
-	cursor: default;
+}
+.duedate.done {
+	font-style: italic;
 }
 .priority {
 	width: 16px;
 	height: 16px;
+}
+.priority.routine {
+	width: 0px;
+	height: 0px;
 }
 .priority.essential {
 	background: url("images/essential.png");
@@ -130,6 +143,9 @@ div.z-tree-body {
 tr.z-treerow-seld, tr.z-treerow-over {
 	background: #00533f !important;
 }
+td.z-treecell {
+	border: none !important;
+}
 div.z-treecell-cnt {
-	color: #FFFFFF !important;
+	color: #ffffff !important;
 }

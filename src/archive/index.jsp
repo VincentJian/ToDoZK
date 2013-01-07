@@ -3,7 +3,6 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Bootstrap, from Twitter</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="">
 	<meta name="author" content="">
@@ -12,32 +11,31 @@
 	<link href="resource/main.css" rel="stylesheet">
 	<link href="http://fonts.googleapis.com/css?family=Droid+Serif:400,400italic" rel="stylesheet" type="text/css">
 	<link href="http://fonts.googleapis.com/css?family=Metal+Mania" rel="stylesheet" type="text/css">
+	
+	<!-- javascript -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript">
+		function changeContentUrl(path) {
+			$('#content').load(path);
+		}
+	</script>
 </head>
 <body>
 	<div id="header">
-		<div class="navbar">
-			<a class="brand" href="#">ToDoZK</a>
-			<ul class="nav">
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="#about">About</a></li>
-				<li><a href="#contact">Contact</a></li>
-			</ul>
-			<div class="login">
-				Logged in as <a href="#">Username</a>
-			</div>
-		</div>
+		<jsp:include page="innerpage/jsp/header.jsp" />
 	</div>
 	<div id="container">
 		<div class="sidebar">
-			<jsp:include page="zul/sidebar.zul" />
+			<jsp:include page="innerpage/zul/sidebar.zul" />
 		</div>
-		<div class="content">
-			<!-- include content.zul here -->
-			<jsp:include page="zul/cardview1.zul" />
+		<div id="content" class="content">
+			<div class="workspace">
+				ToDoZK Demo!
+			</div>
 		</div>
 	</div>
 	<div id="footer">
-		Footer
+		<jsp:include page="innerpage/jsp/footer.jsp" />
 	</div>
 </body>
 </html>

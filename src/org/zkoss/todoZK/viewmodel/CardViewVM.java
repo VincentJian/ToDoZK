@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.annotation.GlobalCommand;
-import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.todoZK.dao.AbstractDB;
 import org.zkoss.todoZK.dao.DBProvider;
 import org.zkoss.todoZK.exception.WorkspaceNotExist;
 import org.zkoss.todoZK.vo.Milestone;
+import org.zkoss.todoZK.vo.Workspace;
+import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Div;
 
 public class CardViewVM {
@@ -17,10 +17,13 @@ public class CardViewVM {
 	private AbstractDB db = DBProvider.getInstance();
 	private List<Milestone> milestones;
 	private Converter<String, Integer, Div> priorityConverter = new PriorityConverter();
+	private Workspace workspace;
 
 	public CardViewVM() {
+		Long workspaceId = Long.parseLong(Executions.getCurrent().getParameter("ws"));
 		try {
-			milestones = db.getMilestonesByWorkspace(new Long(1));
+			workspace = db.getWorkspaceById(workspaceId);
+			milestones = workspace.getMilestones();
 		} catch (WorkspaceNotExist e) {
 			e.printStackTrace();
 		}
@@ -30,9 +33,8 @@ public class CardViewVM {
 		return milestones;
 	}
 	
-	@GlobalCommand @NotifyChange("milestones")
-	public void changeWorkspace(long id) {
-		//TODO: sidebar should trigger global command
+	public Workspace getWorkspace() {
+		return workspace;
 	}
 	
 	public Converter<String, Integer, Div> getPriorityConverter() {
