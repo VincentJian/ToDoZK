@@ -1,15 +1,26 @@
 <zk xmlns:n="native">
-	<!-- UserStatus -->
-	<hlayout sclass="user_status" apply="org.zkoss.bind.BindComposer" 
-	 viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.UserStatusVM")'>
-		<n:div class="path">
-			<label value="@load(vm.currentPath)"/>
-		</n:div>
-		<n:div class="statistic">
-			Finished Task: <label value="@load(vm.finishedAmount)"/>
-		</n:div>
-		<n:div class="statistic">
-			Unfinished Task: <label value="@load(vm.unfinishedAmount)"/>
-		</n:div>
+	<hlayout valign="middle" apply="org.zkoss.bind.BindComposer" 
+		viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.UserStatusVM")'>
+		<vlayout spacing="2px">
+			<n:div>
+				<label value="@load(vm.currentPath)" class="path" />
+			</n:div>
+			<n:div>
+				<label value="Finished Task: " class="statistic" /><label value="@load(vm.finishedAmount)" class="statistic" />
+			</n:div>
+			<n:div>
+				<label value="Unfinished Task: " class="statistic" /><label value="@load(vm.unfinishedAmount)" class="statistic" />
+			</n:div>
+		</vlayout>
+		<div height="54px" style="cursor: pointer;" onClick='changeView.open(self, "after_start");'>
+			<image src="/resource/images/userpic.png" width="40px" height="40px" style="padding-top: 7px;" />
+		</div>
+		<popup id="changeView">
+			<radiogroup id="view"/>
+			<vlayout>
+				<radio label="Card View" radiogroup="view" />
+				<radio label="Tree View" radiogroup="view" />
+			</vlayout> 
+		</popup>
 	</hlayout>
 </zk>
