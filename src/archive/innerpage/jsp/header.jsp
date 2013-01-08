@@ -14,9 +14,11 @@
 <!-- 			<li><a href="#about">About</a></li> -->
 <!-- 			<li><a href="#contact">Contact</a></li> -->
 <!-- 		</ul> -->
-<!-- 		<div class="login"> -->
-<!-- 			Logged in as <a href="#">Username</a> -->
-<!-- 		</div> -->
+		<div class="login">
+			<jsp:include page="../zul/userStatus.zul" />
+		</div>
 	</div>
+
+
 </body>
 </html>

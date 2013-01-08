@@ -22,7 +22,6 @@
 		</div>
 		<div id="content" class="content">
 			<div class="workspace">
-				ToDoZK Demo!
 			</div>
 		</div>
 	</div>

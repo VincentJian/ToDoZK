@@ -36,4 +36,20 @@ public class Workspace {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public int getTotalTaskAmount() {
+		int result = 0;
+		for (Milestone ms : milestones) {
+			result += ms.getTotalTaskAmount();
+		}
+		return result;
+	}
+	
+	public int getFinishedTask() {
+		int result = 0;
+		for (Milestone ms : milestones) {
+			result += ms.getFinishedTask();
+		}
+		return result;
+	}
 }

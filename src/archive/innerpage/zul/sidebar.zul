@@ -8,17 +8,5 @@
 			 	</template>
 			</tree>
 		</div>
-		<!-- UserStatus -->
-		<n:div class="user_status">
-			<n:div class="path">
-				<label value="@load(vm.currentPath)"/>
-			</n:div>
-			<n:div class="statistic">
-				Finished Task: <label value="@load(vm.finishedAmount)"/>
-			</n:div>
-			<n:div class="statistic">
-				Unfinished Task: <label value="@load(vm.unfinishedAmount)"/>
-			</n:div>
-		</n:div>
 	</vlayout>
 </zk>

@@ -1,0 +1,15 @@
+<zk xmlns:n="native">
+	<!-- UserStatus -->
+	<hlayout sclass="user_status" apply="org.zkoss.bind.BindComposer" 
+	 viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.UserStatusVM")'>
+		<n:div class="path">
+			<label value="@load(vm.currentPath)"/>
+		</n:div>
+		<n:div class="statistic">
+			Finished Task: <label value="@load(vm.finishedAmount)"/>
+		</n:div>
+		<n:div class="statistic">
+			Unfinished Task: <label value="@load(vm.unfinishedAmount)"/>
+		</n:div>
+	</hlayout>
+</zk>

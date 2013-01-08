@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.todoZK.Utils;
 import org.zkoss.todoZK.dao.AbstractDB;
 import org.zkoss.todoZK.dao.DBProvider;
 import org.zkoss.todoZK.exception.MilestoneNotExist;
 import org.zkoss.todoZK.vo.Milestone;
-import org.zkoss.todoZK.vo.Task;
 import org.zkoss.todoZK.vo.Workspace;
-import org.zkoss.zk.ui.util.Clients;
 import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.TreeNode;
@@ -20,6 +19,7 @@ public class SidebarVM {
 	private List<Workspace> workspaces;	//Refactory Maybe not a good idea in product
 	private DefaultTreeModel<BoardItem> boardModel;
 	private Workspace nowWorkspace;
+	private Milestone nowMilestone;
 	private int finishedTask;
 	private int totalTaskAmount;
 	
@@ -32,7 +32,10 @@ public class SidebarVM {
 	}
 	
 	public String getCurrentPath() {
-		return nowWorkspace == null ? "All Workspace" : nowWorkspace.getTitle();
+		StringBuffer result = new StringBuffer();
+		result.append(nowWorkspace == null ? "All Workspace" : nowWorkspace.getTitle());
+		result.append(nowMilestone == null ? "" : " > " + nowMilestone.getTitle());
+		return result.toString();
 	}
 	
 	public int getFinishedAmount() {
@@ -53,8 +56,8 @@ public class SidebarVM {
 			if (!ws.equals(nowWorkspace)) {
 				nowWorkspace = ws;
 			}
-			resetTaskStat();
-			gatherTaskStat(nowWorkspace);
+			finishedTask = nowWorkspace.getFinishedTask();
+			totalTaskAmount = nowWorkspace.getTotalTaskAmount();
 			changeContent("innerpage/zul/cardview.zul?ws=" + ws.getId());
 			break;
 		case BoardItem.MILESTONE_TYPE:
@@ -65,29 +68,41 @@ public class SidebarVM {
 				if (!ws.equals(nowWorkspace)) {
 					nowWorkspace = ws;
 				}
-				resetTaskStat();
-				gatherTaskStat(nowWorkspace);
+				if (!ms.equals(nowMilestone)) {
+					nowMilestone = ms;
+				}
+				finishedTask = nowMilestone.getFinishedTask();
+				totalTaskAmount = nowMilestone.getTotalTaskAmount();
 				changeContent("innerpage/zul/cardview.zul?ms=" + ms.getId());
-			} catch (MilestoneNotExist e) {
-			}
+			} catch (MilestoneNotExist e) { }
 			break;
 		case BoardItem.ABOUT_PAGE_TYPE:
+			processStaticPage("about.jsp");
+			break;
 		case BoardItem.LOG_PAGE_TYPE:
-			nowWorkspace = null;
-			gatherTaskStat();
-			changeContent("innerpage/jsp/" + (boardItem.isAboutPage() ? "about.jsp" : "release.jsp"));
+			processStaticPage("release.jsp");
 			break;
 		case BoardItem.ROOT_PAGE_TYPE:
 		default:
-			nowWorkspace = null;
-			gatherTaskStat();
-			changeContent("innerpage/jsp/document.jsp");
+			processStaticPage("document.jsp");
 			break;
 		}
 	}
 	
+	private void processStaticPage(String url) {
+		nowWorkspace = null;
+		nowMilestone = null;
+		totalTaskAmount = 0;
+		finishedTask = 0;
+		for (Workspace ws : workspaces) {
+			totalTaskAmount += ws.getTotalTaskAmount();
+			finishedTask += ws.getFinishedTask();
+		}
+		changeContent("innerpage/jsp/" + url);
+	}
+	
 	private void changeContent(String url) {
-		Clients.evalJavaScript("jq('#content').load('"+url+"');");
+		Utils.changeContent("content", url);
 	}
 
 	private void fetchDB() {
@@ -131,38 +146,6 @@ public class SidebarVM {
 			boardModel.addOpenObject(wsNode);
 		}
 		////
-
-		gatherTaskStat();
-	}
-	
-	private void resetTaskStat() {
-		finishedTask = 0;
-		totalTaskAmount = 0;		
-	}
-
-	/**
-	 * Gather statistics of tasks in every workspace.
-	 */
-	private void gatherTaskStat() {
-		resetTaskStat();
-		for (Workspace ws : workspaces) {
-			gatherTaskStat(ws);	
-		}		
-	}
-	
-	/**
-	 * Gather statistics of tasks in specified workspace.
-	 * @param ws
-	 */
-	private void gatherTaskStat(Workspace ws) {
-		for (Milestone ms : ws.getMilestones()) {
-			for (Task task : ms.getTasks()) {
-				totalTaskAmount++;
-				if (task.isFinish()) {
-					finishedTask++;
-				}
-			}
-		}
 	}
 	
 	private Workspace getWorkspaceById(Long id) {
