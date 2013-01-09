@@ -1,6 +1,10 @@
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <zk xmlns:n="native">
 	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.todoZK.viewmodel.TaskViewerVM')">
-		<n:div class="workspace">${vm.workspace.title}</n:div>
+		<n:div>
+			<label value="${vm.workspace.title}" sclass="workspace" />
+			<label value="@load(c:cat('>', vm.milestone.title))" if="${vm.milestone != null}" sclass="workspace" />
+		</n:div>
 		<hlayout hflex="min" children="@load(vm.milestones)" spacing="8px" style="padding-right: 10px;" if="${vm.milestones != null}">
 			<template name="children" var="milestone">
 				<window title="@load(milestone.title)" width="250px" border="normal">
@@ -23,10 +27,10 @@
 				</window>
 			</template>
 		</hlayout>
-		<window title="@load(vm.milestone.title)" width="250px" border="normal" if="${vm.milestone != null}">
-			<vlayout children="@load(vm.milestone.tasks)">
-				<template name="children" var="task">
-					<groupbox title="@load(task.title)" mold="3d" open="@load(!task.finish)">
+		<anchorlayout width="100%" if="${vm.milestone != null}" children="@load(vm.milestone.tasks)">
+			<template name="children" var="task">
+				<anchorchildren width="250px" height="150px" style="padding: 3px;">
+					<groupbox title="@load(task.title)" mold="3d" open="@load(!task.finish)" style="background: #ffffff;">
 						<caption>
 							<n:div class="duedate done">${task.finish ? "Done" : ""}</n:div>
 							<hlayout if="${!task.finish}">
@@ -38,8 +42,8 @@
 						</caption>
 						<n:div class="z-label">${task.description}</n:div>
 					</groupbox>
-				</template>
-			</vlayout>
-		</window>
+				</anchorchildren>
+			</template>
+		</anchorlayout>
 	</div>
 </zk>

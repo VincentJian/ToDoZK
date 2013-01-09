@@ -20,10 +20,7 @@
 		<div class="sidebar">
 			<jsp:include page="innerpage/zul/sidebar.zul" />
 		</div>
-		<div id="content" class="content">
-			<div class="workspace">
-			</div>
-		</div>
+		<div id="content" class="content"></div>
 	</div>
 	<div id="footer">
 		<jsp:include page="innerpage/jsp/footer.jsp" />

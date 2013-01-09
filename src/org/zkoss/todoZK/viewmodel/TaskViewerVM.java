@@ -6,8 +6,6 @@ import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
 import org.zkoss.todoZK.dao.AbstractDB;
 import org.zkoss.todoZK.dao.DBProvider;
-import org.zkoss.todoZK.exception.MilestoneNotExist;
-import org.zkoss.todoZK.exception.WorkspaceNotExist;
 import org.zkoss.todoZK.vo.Milestone;
 import org.zkoss.todoZK.vo.Workspace;
 import org.zkoss.zk.ui.Execution;
@@ -30,20 +28,14 @@ public class TaskViewerVM {
 			try {
 				workspace = db.getWorkspaceById(Long.parseLong(ws));
 				milestones = workspace.getMilestones();
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			} catch (WorkspaceNotExist e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		} else if (ms != null) {
 			try {
 				milestone = db.getMilestoneById(Long.parseLong(ms));
 				workspace = db.getWorkspaceById(milestone.getWorkspaceId());
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			} catch (MilestoneNotExist e) {
-				e.printStackTrace();
-			} catch (WorkspaceNotExist e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

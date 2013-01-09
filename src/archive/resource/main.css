@@ -71,7 +71,7 @@ body {
 	}
 		.sidebar .menu {
 			width: 250px;
-			height: 300px;
+			height: 500px;
 			border: none;
 			padding: 10px 0 0 1px;
 			background: #00a3a7;
@@ -99,7 +99,7 @@ body {
 	}
 
 .workspace {
-	font-size: 18px;
+	font-size: 18px !important;
 	color: #ffffff;
 }
 .duedate {
