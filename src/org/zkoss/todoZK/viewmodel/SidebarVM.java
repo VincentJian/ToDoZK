@@ -1,9 +1,11 @@
 package org.zkoss.todoZK.viewmodel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.zkoss.bind.annotation.NotifyChange;
+import org.zkoss.bind.BindUtils;
 import org.zkoss.todoZK.Utils;
 import org.zkoss.todoZK.dao.AbstractDB;
 import org.zkoss.todoZK.dao.DBProvider;
@@ -46,7 +48,6 @@ public class SidebarVM {
 		return totalTaskAmount - finishedTask;
 	}
 	
-	@NotifyChange({"finishedAmount", "unfinishedAmount", "currentPath"})
 	public void setSelectedItem(TreeNode<BoardItem> selectedItem) {
 		Workspace ws;
 		BoardItem boardItem = selectedItem.getData();
@@ -58,7 +59,7 @@ public class SidebarVM {
 			}
 			finishedTask = nowWorkspace.getFinishedTask();
 			totalTaskAmount = nowWorkspace.getTotalTaskAmount();
-			changeContent("innerpage/zul/cardview.zul?ws=" + ws.getId());
+			changeContent("innerpage/zul/cardview.zul?ws=" + ws.getId(), ws.getTitle(), finishedTask, totalTaskAmount);
 			break;
 		case BoardItem.MILESTONE_TYPE:
 			Milestone ms;
@@ -73,7 +74,7 @@ public class SidebarVM {
 				}
 				finishedTask = nowMilestone.getFinishedTask();
 				totalTaskAmount = nowMilestone.getTotalTaskAmount();
-				changeContent("innerpage/zul/cardview.zul?ms=" + ms.getId());
+				changeContent("innerpage/zul/cardview.zul?ms=" + ms.getId(), ws.getTitle(), finishedTask, totalTaskAmount);
 			} catch (MilestoneNotExist e) { }
 			break;
 		case BoardItem.ABOUT_PAGE_TYPE:
@@ -98,11 +99,16 @@ public class SidebarVM {
 			totalTaskAmount += ws.getTotalTaskAmount();
 			finishedTask += ws.getFinishedTask();
 		}
-		changeContent("innerpage/jsp/" + url);
+		changeContent("innerpage/jsp/" + url, "All Workspace", finishedTask, totalTaskAmount);
 	}
 	
-	private void changeContent(String url) {
+	private void changeContent(String url, String path, int finished, int total) {
 		Utils.changeContent("content", url);
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("path", path);
+		param.put("finished", finished);
+		param.put("total", total);
+		BindUtils.postGlobalCommand(null, null, "updateUserStatus", param);
 	}
 
 	private void fetchDB() {
