@@ -1,4 +1,5 @@
 <zk xmlns:n="native">
+	<custom-attributes scope="request" org.zkoss.zk.ui.page.redrawCtrl="page"/>
 	<style>
 		tr.z-row td.z-row-inner {
 			background: rgba(214, 227, 238, 0.89);
