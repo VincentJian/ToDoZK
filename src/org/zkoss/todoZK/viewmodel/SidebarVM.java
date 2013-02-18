@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
+import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.GlobalCommand;
 import org.zkoss.todoZK.Utils;
 import org.zkoss.todoZK.dao.AbstractDB;
 import org.zkoss.todoZK.dao.DBProvider;
@@ -17,6 +19,7 @@ import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.TreeNode;
 
 public class SidebarVM {
+	private static final String[] VIEW_URL = {"cardview.zul", "treeview.zul"};
 	private static AbstractDB db = DBProvider.getInstance();
 	private List<Workspace> workspaces;	//Refactory Maybe not a good idea in product
 	private DefaultTreeModel<BoardItem> boardModel;
@@ -24,6 +27,7 @@ public class SidebarVM {
 	private Milestone nowMilestone;
 	private int finishedTask;
 	private int totalTaskAmount;
+	private int viewType;
 	
 	public SidebarVM() {
 		fetchDB();
@@ -59,7 +63,8 @@ public class SidebarVM {
 			}
 			finishedTask = nowWorkspace.getFinishedTask();
 			totalTaskAmount = nowWorkspace.getTotalTaskAmount();
-			changeContent("innerpage/zul/cardview.zul?ws=" + ws.getId(), ws.getTitle(), finishedTask, totalTaskAmount);
+			changeContent("innerpage/zul/" + VIEW_URL[viewType] +
+					"?ws=" + ws.getId(), ws.getTitle(), finishedTask, totalTaskAmount);
 			break;
 		case BoardItem.MILESTONE_TYPE:
 			Milestone ms;
@@ -74,7 +79,8 @@ public class SidebarVM {
 				}
 				finishedTask = nowMilestone.getFinishedTask();
 				totalTaskAmount = nowMilestone.getTotalTaskAmount();
-				changeContent("innerpage/zul/cardview.zul?ms=" + ms.getId(), ws.getTitle(), finishedTask, totalTaskAmount);
+				changeContent("innerpage/zul/" + VIEW_URL[viewType] +
+						"?ms=" + ms.getId(), ws.getTitle(), finishedTask, totalTaskAmount);
 			} catch (MilestoneNotExist e) { }
 			break;
 		case BoardItem.ABOUT_PAGE_TYPE:
@@ -88,6 +94,11 @@ public class SidebarVM {
 			processStaticPage("document.jsp");
 			break;
 		}
+	}
+	
+	@GlobalCommand
+	public void viewChange(@BindingParam("type")int value){
+		viewType = value;
 	}
 	
 	private void processStaticPage(String url) {

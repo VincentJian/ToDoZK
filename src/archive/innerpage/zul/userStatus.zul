@@ -1,5 +1,6 @@
 <zk xmlns:n="native">
-	<div apply="org.zkoss.bind.BindComposer" viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.UserStatusVM")'>
+	<div apply="org.zkoss.bind.BindComposer" viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.UserStatusVM")'
+	 binder='@init(queueScope="session")'>
 		<hlayout valign="middle">
 			<vlayout spacing="2px">
 				<n:div>
@@ -17,10 +18,10 @@
 			</div>
 		</hlayout>
 		<popup id="changeView">
-			<radiogroup id="view"/>
+			<radiogroup id="view" onCheck='@global-command("viewChange", type=self.selectedItem.value)' />
 			<vlayout>
-				<radio label="Card View" radiogroup="view" />
-				<radio label="Tree View" radiogroup="view" />
+				<radio label="Card View" radiogroup="view" value="0" selected="true" />
+				<radio label="Tree View" radiogroup="view" value="1" />
 			</vlayout> 
 		</popup>
 	</div>

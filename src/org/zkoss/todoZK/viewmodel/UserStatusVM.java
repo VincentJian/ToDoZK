@@ -44,7 +44,7 @@ public class UserStatusVM {
 		finishedTask = finished;
 		totalTaskAmount = total;
 	}
-	
+		
 	private void gatherAllStat() {
 		workspaces = db.getWorkspaces();
 		currentPath = "All Workspace";
