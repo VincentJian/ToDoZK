@@ -4,9 +4,6 @@ import java.util.List;
 
 import org.zkoss.bind.BindContext;
 import org.zkoss.bind.Converter;
-import org.zkoss.bind.annotation.BindingParam;
-import org.zkoss.bind.annotation.GlobalCommand;
-import org.zkoss.todoZK.Utils;
 import org.zkoss.todoZK.dao.AbstractDB;
 import org.zkoss.todoZK.dao.DBProvider;
 import org.zkoss.todoZK.vo.Milestone;
@@ -16,7 +13,6 @@ import org.zkoss.zk.ui.Executions;
 import org.zkoss.zul.Div;
 
 public class TaskViewerVM {
-	private static final String[] VIEW_URL = {"cardview.zul", "treeview.zul"};
 	private AbstractDB db = DBProvider.getInstance();
 	String ws;
 	String ms;
@@ -44,18 +40,6 @@ public class TaskViewerVM {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	@GlobalCommand
-	public void viewChange(@BindingParam("type")int value){
-		StringBuffer url = new StringBuffer("innerpage/zul/" + VIEW_URL[value]);
-		if (ws != null) {
-			url.append("?ws=" + ws);
-		}
-		if (ms != null) {
-			url.append("?ms=" + ms);
-		}
-		Utils.changeContent("content", url.toString());
 	}
 	
 	public List<Milestone> getMilestones() {

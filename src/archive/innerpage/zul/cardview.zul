@@ -1,8 +1,7 @@
 <?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <zk xmlns:n="native">
 	<custom-attributes scope="request" org.zkoss.zk.ui.page.redrawCtrl="page"/>
-	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.todoZK.viewmodel.TaskViewerVM')"
-	 binder='@init(queueScope="session")'>
+	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.todoZK.viewmodel.TaskViewerVM')">
 		<n:div>
 			<label value="${vm.workspace.title}" sclass="workspace" />
 			<label value="@load(c:cat('>', vm.milestone.title))" if="${vm.milestone != null}" sclass="workspace" />

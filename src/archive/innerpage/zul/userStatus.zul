@@ -1,6 +1,5 @@
 <zk xmlns:n="native">
-	<div apply="org.zkoss.bind.BindComposer" viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.UserStatusVM")'
-	 binder='@init(queueScope="session")'>
+	<div apply="org.zkoss.bind.BindComposer" viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.UserStatusVM")'>
 		<hlayout valign="middle">
 			<vlayout spacing="2px">
 				<n:div>

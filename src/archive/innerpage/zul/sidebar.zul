@@ -1,6 +1,5 @@
 <zk xmlns:n="native">
-	<vlayout apply="org.zkoss.bind.BindComposer" viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.SidebarVM")' 
-	 binder='@init(queueScope="session")' spacing="0">
+	<vlayout apply="org.zkoss.bind.BindComposer" viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.SidebarVM")' spacing="0">
 		<!-- Board -->
 		<div sclass="menu">
 			<tree model="@load(vm.boardModel)" selectedItem="@save(vm.selectedItem)" hflex="1">

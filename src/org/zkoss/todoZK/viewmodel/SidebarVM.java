@@ -61,6 +61,7 @@ public class SidebarVM {
 			if (!ws.equals(nowWorkspace)) {
 				nowWorkspace = ws;
 			}
+			nowMilestone = null;
 			finishedTask = nowWorkspace.getFinishedTask();
 			totalTaskAmount = nowWorkspace.getTotalTaskAmount();
 			changeContent("innerpage/zul/" + VIEW_URL[viewType] +
@@ -99,6 +100,13 @@ public class SidebarVM {
 	@GlobalCommand
 	public void viewChange(@BindingParam("type")int value){
 		viewType = value;
+		if (nowMilestone != null) {
+			Utils.changeContent("content", "innerpage/zul/" + VIEW_URL[viewType] + "?ms=" + nowMilestone.getId());
+			return;
+		}
+		if (nowWorkspace != null) {
+			Utils.changeContent("content", "innerpage/zul/" + VIEW_URL[viewType] + "?ws=" + nowWorkspace.getId());
+		}
 	}
 	
 	private void processStaticPage(String url) {
