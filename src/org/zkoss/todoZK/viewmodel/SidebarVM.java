@@ -7,19 +7,22 @@ import java.util.Map;
 
 import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
+import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
+import org.zkoss.todoZK.PageMapping;
 import org.zkoss.todoZK.Utils;
 import org.zkoss.todoZK.dao.AbstractDB;
 import org.zkoss.todoZK.dao.DBProvider;
 import org.zkoss.todoZK.exception.MilestoneNotExist;
 import org.zkoss.todoZK.vo.Milestone;
 import org.zkoss.todoZK.vo.Workspace;
+import org.zkoss.zk.ui.Executions;
+import org.zkoss.zk.ui.event.BookmarkEvent;
 import org.zkoss.zul.DefaultTreeModel;
 import org.zkoss.zul.DefaultTreeNode;
 import org.zkoss.zul.TreeNode;
 
 public class SidebarVM {
-	private static final String[] VIEW_URL = {"cardview.zul", "treeview.zul"};
 	private static AbstractDB db = DBProvider.getInstance();
 	private List<Workspace> workspaces;	//Refactory Maybe not a good idea in product
 	private DefaultTreeModel<BoardItem> boardModel;
@@ -37,79 +40,106 @@ public class SidebarVM {
 		return boardModel;
 	}
 	
-	public String getCurrentPath() {
-		StringBuffer result = new StringBuffer();
-		result.append(nowWorkspace == null ? "All Workspace" : nowWorkspace.getTitle());
-		result.append(nowMilestone == null ? "" : " > " + nowMilestone.getTitle());
-		return result.toString();
-	}
-	
-	public int getFinishedAmount() {
-		return finishedTask;
-	}
-	
-	public int getUnfinishedAmount() {
-		return totalTaskAmount - finishedTask;
-	}
-	
 	public void setSelectedItem(TreeNode<BoardItem> selectedItem) {
-		Workspace ws;
 		BoardItem boardItem = selectedItem.getData();
-		switch (boardItem.getType()) {
+		int type = boardItem.getType(); 
+		switch (type) {
 		case BoardItem.WORKSPACE_TYPE:
-			ws = getWorkspaceById(boardItem.getId());
-			if (!ws.equals(nowWorkspace)) {
-				nowWorkspace = ws;
-			}
-			nowMilestone = null;
-			finishedTask = nowWorkspace.getFinishedTask();
-			totalTaskAmount = nowWorkspace.getTotalTaskAmount();
-			changeContent("innerpage/zul/" + VIEW_URL[viewType] +
-					"?ws=" + ws.getId(), ws.getTitle(), finishedTask, totalTaskAmount);
+			gotoWorkspace(boardItem.getId());
 			break;
 		case BoardItem.MILESTONE_TYPE:
-			Milestone ms;
-			try {
-				ms = db.getMilestoneById(boardItem.getId()); //Refactory should not query DB
-				ws = getWorkspaceById(ms.getWorkspaceId());
-				if (!ws.equals(nowWorkspace)) {
-					nowWorkspace = ws;
-				}
-				if (!ms.equals(nowMilestone)) {
-					nowMilestone = ms;
-				}
-				finishedTask = nowMilestone.getFinishedTask();
-				totalTaskAmount = nowMilestone.getTotalTaskAmount();
-				changeContent("innerpage/zul/" + VIEW_URL[viewType] +
-						"?ms=" + ms.getId(), ws.getTitle(), finishedTask, totalTaskAmount);
-			} catch (MilestoneNotExist e) { }
+			gotoMilestone(boardItem.getId());
 			break;
 		case BoardItem.ABOUT_PAGE_TYPE:
-			processStaticPage("about.jsp");
-			break;
 		case BoardItem.LOG_PAGE_TYPE:
-			processStaticPage("release.jsp");
-			break;
 		case BoardItem.ROOT_PAGE_TYPE:
+			processStaticPage(type);
+			break;
 		default:
-			processStaticPage("document.jsp");
+			processStaticPage(BoardItem.ROOT_PAGE_TYPE);
 			break;
 		}
 	}
+		
+	@Command
+	public void bookmarkChange(@BindingParam("evnt") BookmarkEvent evnt){
+		String bookmark = evnt.getBookmark();
+		int type = Utils.getIndex(PageMapping.BOOKMARK_VALUE, bookmark);
+		switch(type){
+		case PageMapping.ABOUT_INDEX:
+		case PageMapping.DOCUMENT_INDEX:
+		case PageMapping.RELEASE_INDEX:
+			processStaticPage(type);
+			break;
+		default:
+			processStaticPage(BoardItem.ROOT_PAGE_TYPE);
+			break;
+		}
+
+		if(bookmark.startsWith("ws=")){
+			try{
+				Long wid = Long.parseLong(bookmark.substring(3));
+				gotoWorkspace(wid);
+			}catch(Exception e){
+				processStaticPage(PageMapping.DOCUMENT_INDEX);
+			}
+		} else if(bookmark.startsWith("ms=")){
+			try{
+				Long mid = Long.parseLong(bookmark.substring(3));
+				gotoMilestone(mid);
+			}catch(Exception e){
+				processStaticPage(PageMapping.DOCUMENT_INDEX);
+			}
+		} else {
+			processStaticPage(PageMapping.DOCUMENT_INDEX);
+		}
+	}
+	
 	
 	@GlobalCommand
 	public void viewChange(@BindingParam("type")int value){
 		viewType = value;
 		if (nowMilestone != null) {
-			Utils.changeContent("content", "innerpage/zul/" + VIEW_URL[viewType] + "?ms=" + nowMilestone.getId());
+			Utils.changeContent("content", "innerpage/zul/" + PageMapping.VIEW_URL[viewType] + "?ms=" + nowMilestone.getId());
 			return;
 		}
 		if (nowWorkspace != null) {
-			Utils.changeContent("content", "innerpage/zul/" + VIEW_URL[viewType] + "?ws=" + nowWorkspace.getId());
+			Utils.changeContent("content", "innerpage/zul/" + PageMapping.VIEW_URL[viewType] + "?ws=" + nowWorkspace.getId());
 		}
 	}
+
+	private void gotoMilestone(Long id) {
+		try {
+			Milestone ms = db.getMilestoneById(id); //Refactory should not query DB
+			Workspace ws = getWorkspaceById(ms.getWorkspaceId());
+			if (!ws.equals(nowWorkspace)) {
+				nowWorkspace = ws;
+			}
+			if (!ms.equals(nowMilestone)) {
+				nowMilestone = ms;
+			}
+			finishedTask = nowMilestone.getFinishedTask();
+			totalTaskAmount = nowMilestone.getTotalTaskAmount();
+			changeContent("innerpage/zul/" + PageMapping.VIEW_URL[viewType] +
+					"?ms=" + ms.getId(), ws.getTitle(), finishedTask, totalTaskAmount);
+			Executions.getCurrent().getDesktop().setBookmark("ms="+id);
+		} catch (MilestoneNotExist e) { }		
+	}
+
+	private void gotoWorkspace(Long id) {
+		Workspace ws = getWorkspaceById(id);
+		if (!ws.equals(nowWorkspace)) {
+			nowWorkspace = ws;
+		}
+		nowMilestone = null;
+		finishedTask = nowWorkspace.getFinishedTask();
+		totalTaskAmount = nowWorkspace.getTotalTaskAmount();
+		changeContent("innerpage/zul/" + PageMapping.VIEW_URL[viewType] +
+				"?ws=" + ws.getId(), ws.getTitle(), finishedTask, totalTaskAmount);
+		Executions.getCurrent().getDesktop().setBookmark("ws="+id);
+	}
 	
-	private void processStaticPage(String url) {
+	private void processStaticPage(int type) {
 		nowWorkspace = null;
 		nowMilestone = null;
 		totalTaskAmount = 0;
@@ -118,7 +148,8 @@ public class SidebarVM {
 			totalTaskAmount += ws.getTotalTaskAmount();
 			finishedTask += ws.getFinishedTask();
 		}
-		changeContent("innerpage/jsp/" + url, "All Workspace", finishedTask, totalTaskAmount);
+		changeContent("innerpage/jsp/" + PageMapping.STATIC_URL[type], "All Workspace", finishedTask, totalTaskAmount);
+		Executions.getCurrent().getDesktop().setBookmark(PageMapping.BOOKMARK_VALUE[type]);
 	}
 	
 	private void changeContent(String url, String path, int finished, int total) {

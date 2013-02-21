@@ -1,12 +1,10 @@
 <zk xmlns:n="native">
-	<vlayout apply="org.zkoss.bind.BindComposer" viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.SidebarVM")' spacing="0">
-		<!-- Board -->
-		<div sclass="menu">
-			<tree model="@load(vm.boardModel)" selectedItem="@save(vm.selectedItem)" hflex="1">
-				<template name="model" var="board">
-					<treeitem label="@load(board.data.title)" />
-			 	</template>
-			</tree>
-		</div>
-	</vlayout>
+	<div apply="org.zkoss.bind.BindComposer" viewModel='@id("vm") @init("org.zkoss.todoZK.viewmodel.SidebarVM")' 
+	 onBookmarkChange='@command("bookmarkChange", evnt=event)' sclass="menu">
+		<tree model="@load(vm.boardModel)" selectedItem="@save(vm.selectedItem)" hflex="1">
+			<template name="model" var="board">
+				<treeitem label="@load(board.data.title)" />
+		 	</template>
+		</tree>
+	</div>
 </zk>
