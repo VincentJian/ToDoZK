@@ -4,7 +4,7 @@
 	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.todoZK.viewmodel.TaskViewerVM')">
 		<n:div>
 			<label value="${vm.workspace.title}" sclass="workspace" />
-			<label value="@load(c:cat('>', vm.milestone.title))" if="${vm.milestone != null}" sclass="workspace" />
+			<label value="@load(c:cat('> ', vm.milestone.title))" if="${vm.milestone != null}" sclass="workspace" />
 		</n:div>
 		<hlayout hflex="min" children="@load(vm.milestones)" spacing="8px" style="padding-right: 10px;" if="${vm.milestones != null}">
 			<template name="children" var="milestone">

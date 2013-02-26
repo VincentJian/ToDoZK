@@ -34,8 +34,9 @@ public class SidebarVM {
 	
 	public SidebarVM() {
 		fetchDB();
+		processStaticPage(PageMapping.DOCUMENT_INDEX);
 	}
-	
+		
 	public DefaultTreeModel<BoardItem> getBoardModel() {
 		return boardModel;
 	}
@@ -70,9 +71,6 @@ public class SidebarVM {
 		case PageMapping.DOCUMENT_INDEX:
 		case PageMapping.RELEASE_INDEX:
 			processStaticPage(type);
-			break;
-		default:
-			processStaticPage(BoardItem.ROOT_PAGE_TYPE);
 			break;
 		}
 
