@@ -1,47 +1,46 @@
-<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
 <zk xmlns:n="native">
 	<custom-attributes scope="request" org.zkoss.zk.ui.page.redrawCtrl="page"/>
 	<div apply="org.zkoss.bind.BindComposer" viewModel="@id('vm') @init('org.zkoss.todoZK.viewmodel.TaskViewerVM')">
 		<n:div>
-			<label value="${vm.workspace.title}" sclass="workspace" />
-			<label value="@load(c:cat('> ', vm.milestone.title))" if="${vm.milestone != null}" sclass="workspace" />
+			<label value="@load(vm.workspace.title)" sclass="workspace" />
+			<label value='@load("> ".concat(vm.milestone.title))' if="${vm.milestone != null}" sclass="workspace" />
 		</n:div>
-		<hlayout hflex="min" children="@load(vm.milestones)" spacing="8px" style="padding-right: 10px;" if="${vm.milestones != null}">
+		<hlayout children="@load(vm.milestones)" if="${vm.milestones != null}" hflex="min" spacing="8px" style="padding-right: 10px;">
 			<template name="children" var="milestone">
 				<window title="@load(milestone.title)" width="250px" border="normal">
 					<vlayout children="@load(milestone.tasks)">
 						<template name="children" var="task">
 							<groupbox title="@load(task.title)" mold="3d" open="@load(!task.finish)">
 								<caption>
-									<n:div class="duedate done">${task.finish ? "Done" : ""}</n:div>
-									<hlayout if="${!task.finish}">
+									<label value='@load(task.finish ? "Done" : "")' class="duedate done" />
+									<hlayout visible="@load(!task.finish)">
 										<div sclass="duedate">
 											<label value="@load(task.dueDate) @converter('formattedDate', format='yyyy/MM/dd')" />
 										</div>
 										<div sclass="@load(task.priority) @converter(vm.priorityConverter)" />
 									</hlayout>
 								</caption>
-								<n:div class="z-label">${task.description}</n:div>
+								<label value="@load(task.description)" />
 							</groupbox>
 						</template>
 					</vlayout>
 				</window>
 			</template>
 		</hlayout>
-		<anchorlayout width="100%" if="${vm.milestone != null}" children="@load(vm.milestone.tasks)">
+		<anchorlayout children="@load(vm.milestone.tasks)" if="${vm.milestone != null}" width="100%">
 			<template name="children" var="task">
 				<anchorchildren width="250px" height="150px" style="padding: 3px;">
 					<groupbox title="@load(task.title)" mold="3d" open="@load(!task.finish)" style="background: #ffffff;">
 						<caption>
-							<n:div class="duedate done">${task.finish ? "Done" : ""}</n:div>
-							<hlayout if="${!task.finish}">
+							<label value='@load(task.finish ? "Done" : "")'></label>
+							<hlayout visible="@load(!task.finish)">
 								<div sclass="duedate">
 									<label value="@load(task.dueDate) @converter('formattedDate', format='yyyy/MM/dd')" />
 								</div>
 								<div sclass="@load(task.priority) @converter(vm.priorityConverter)" />
 							</hlayout>
 						</caption>
-						<n:div class="z-label">${task.description}</n:div>
+						<label value="@load(task.description)" />
 					</groupbox>
 				</anchorchildren>
 			</template>

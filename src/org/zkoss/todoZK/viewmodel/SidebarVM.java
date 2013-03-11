@@ -9,6 +9,7 @@ import org.zkoss.bind.BindUtils;
 import org.zkoss.bind.annotation.BindingParam;
 import org.zkoss.bind.annotation.Command;
 import org.zkoss.bind.annotation.GlobalCommand;
+import org.zkoss.bind.annotation.NotifyChange;
 import org.zkoss.todoZK.PageMapping;
 import org.zkoss.todoZK.Utils;
 import org.zkoss.todoZK.dao.AbstractDB;
@@ -34,13 +35,57 @@ public class SidebarVM {
 	
 	public SidebarVM() {
 		fetchDB();
+		showDocument();
+	}
+	
+	public List<Workspace> getWorkspaces() {
+		return workspaces;
+	}
+	
+	@Command 
+	public void showAbout() {
+		processStaticPage(PageMapping.ABOUT_INDEX);
+	}
+	
+	@Command
+	public void showRelease() {
+		processStaticPage(PageMapping.RELEASE_INDEX);
+	}
+
+	@Command
+	public void showDocument() {
 		processStaticPage(PageMapping.DOCUMENT_INDEX);
 	}
-		
+
 	public DefaultTreeModel<BoardItem> getBoardModel() {
 		return boardModel;
 	}
+
+	/**
+	 * Do nothing, just trigger NotifyChange to clear other tree's selectedItem.
+	 * @param selectedItem
+	 */
+	@SuppressWarnings("rawtypes")
+	@NotifyChange("selectedItem")
+	public void setDocSelectItem(TreeNode selectedItem) {}
 	
+	/**
+	 * @return Always null for reset selectedItem.
+	 */
+	@SuppressWarnings("rawtypes")
+	public TreeNode getDocSelectItem() {
+		return null;
+	}
+	
+	/**
+	 * @return Always null for reset selectedItem.
+	 */
+	@SuppressWarnings("rawtypes")
+	public TreeNode getSelectedItem() {
+		return null;
+	}
+
+	@NotifyChange("docSelectItem")
 	public void setSelectedItem(TreeNode<BoardItem> selectedItem) {
 		BoardItem boardItem = selectedItem.getData();
 		int type = boardItem.getType(); 
@@ -51,13 +96,8 @@ public class SidebarVM {
 		case BoardItem.MILESTONE_TYPE:
 			gotoMilestone(boardItem.getId());
 			break;
-		case BoardItem.ABOUT_PAGE_TYPE:
-		case BoardItem.LOG_PAGE_TYPE:
-		case BoardItem.ROOT_PAGE_TYPE:
-			processStaticPage(type);
-			break;
 		default:
-			processStaticPage(BoardItem.ROOT_PAGE_TYPE);
+			processStaticPage(PageMapping.DOCUMENT_INDEX);
 			break;
 		}
 	}
@@ -162,25 +202,6 @@ public class SidebarVM {
 	private void fetchDB() {
 		DefaultTreeNode<BoardItem> root = new DefaultTreeNode<BoardItem>(null, new ArrayList<DefaultTreeNode<BoardItem>>());
 		boardModel = new DefaultTreeModel<BoardItem>(root);
-		
-		// static page node
-		DefaultTreeNode<BoardItem> pageRoot = new DefaultTreeNode<BoardItem>(
-			new BoardItem(Long.MIN_VALUE, "Document", BoardItem.ROOT_PAGE_TYPE),
-			new ArrayList<DefaultTreeNode<BoardItem>>()
-		);
-		pageRoot.add(
-			new DefaultTreeNode<BoardItem>(
-				new BoardItem(Long.MIN_VALUE, "About", BoardItem.ABOUT_PAGE_TYPE)
-			)
-		);
-		pageRoot.add(
-			new DefaultTreeNode<BoardItem>(
-				new BoardItem(Long.MIN_VALUE, "Release Log", BoardItem.LOG_PAGE_TYPE)
-			)
-		);		
-		root.add(pageRoot);
-		boardModel.addOpenObject(pageRoot);
-		////
 		
 		// build items of Workspace / Milestone
 		workspaces = db.getWorkspaces();
